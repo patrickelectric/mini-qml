@@ -1,0 +1,80 @@
+sudo: false
+language: cpp
+
+env:
+  global:
+    - BIN=mini-qml
+
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: require
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-7
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+
+    - os: osx
+      osx_image: xcode9.2
+      compiler: clang
+      env:
+        - MATRIX_EVAL="COMPILER=clang++"
+
+install:
+- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
+    sudo apt update -qq;
+    sudo apt search qt510;
+    sudo apt install build-essential qt510-meta-minimal/trusty
+    qt510quickcontrols/trusty qt510quickcontrols2/trusty
+    qt510graphicaleffects/trusty qt510svg/trusty qt510scxml/trusty git;
+  fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+    brew update > /dev/null;
+    brew install qt5;
+    chmod -R 755 /usr/local/opt/qt5/*;
+    export QTDIR="/usr/local/opt/qt5";
+    export PATH="$QTDIR/bin:$PATH";
+  fi
+
+script:
+- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    source /opt/qt*/bin/qt*-env.sh;
+    mkdir build;
+    cd build;
+    qmake ..;
+    make;
+    mkdir deploy;
+    cp ../deploy/icon.png deploy/;
+    cp ../deploy/$BIN.desktop deploy/;
+    mv $BIN deploy/;
+    ls deploy;
+    wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage";
+    chmod a+x linuxdeployqt*.AppImage;
+    unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
+    mkdir -p deploy/usr/plugins/imageformats/;
+    cp /opt/qt510/plugins/imageformats/libqsvg.so deploy/usr/plugins/imageformats/;
+    ./linuxdeployqt*.AppImage deploy/$BIN -verbose=2 -qmldir=../qml -bundle-non-qt-libs;
+    ./linuxdeployqt*.AppImage deploy/$BIN.desktop -verbose=2 -qmldir=../qml -appimage;
+    find . | grep AppImage;
+  fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+    mkdir build;
+    cd build;
+    qmake ..;
+    make;
+    find .;
+    macdeployqt $BIN.app/ -qmldir=../qml -dmg;
+  fi
+
+after_success:
+- wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    bash ./upload.sh ./$BIN*.AppImage*;
+  fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh $BIN*.dmg*; fi
