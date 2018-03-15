@@ -64,3 +64,12 @@ after_build:
 artifacts:
   - path: '%BIN%_%CONFIGURATION%.zip'
     name: '%BIN%'
+
+deploy:
+  - provider: GitHub
+    release: continuous
+    artifact: '%BIN%'
+    draft: false
+    prerelease: true
+    auth_token:
+      secure: BC8BBwf6sV+/f+AoRHCskXQBXwdvXuXB7sFuJWN0lbIzJs8E87T77aY5HovyaFmc

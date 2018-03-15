@@ -33,6 +33,7 @@ install:
     sudo apt install build-essential qt510-meta-minimal/trusty
     qt510quickcontrols/trusty qt510quickcontrols2/trusty
     qt510graphicaleffects/trusty qt510svg/trusty qt510scxml/trusty git;
+    export ARTIFACT="$BIN*.AppImage";
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     brew update > /dev/null;
@@ -40,6 +41,7 @@ install:
     chmod -R 755 /usr/local/opt/qt5/*;
     export QTDIR="/usr/local/opt/qt5";
     export PATH="$QTDIR/bin:$PATH";
+    export ARTIFACT="$BIN*.dmg";
   fi
 
 script:
@@ -68,13 +70,14 @@ script:
     cd build;
     qmake ..;
     make;
-    find .;
     macdeployqt $BIN.app/ -qmldir=../qml -dmg;
+    find . | grep dmg;
   fi
 
 after_success:
+- export GITHUB_TOKEN=$github_token
 - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
 - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    bash ./upload.sh ./$BIN*.AppImage*;
+    bash ./upload.sh $ARTIFACT;
   fi
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh $BIN*.dmg*; fi
+- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh ARTIFACT; fi

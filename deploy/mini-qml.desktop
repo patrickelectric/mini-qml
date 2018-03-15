@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=mini-qml
+GenericName=mini-qml
+Comment=mini-qml Comment
+Icon=icon
+Exec=mini-qml
+Terminal=false
+Categories=Utility;
+Keywords=computer;
