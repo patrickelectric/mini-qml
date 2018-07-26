@@ -8,7 +8,7 @@ env:
 matrix:
   include:
     - os: linux
-      dist: trusty
+      dist: xenial
       sudo: require
       addons:
         apt:
@@ -30,12 +30,13 @@ before_install:
 
 install:
 - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
+    export QTV=qt511
+    sudo add-apt-repository --yes ppa:beineri/opt-qt-5.11.1-xenial;
     sudo apt update -qq;
-    sudo apt search qt510;
-    sudo apt install build-essential qt510-meta-minimal/trusty
-    qt510quickcontrols/trusty qt510quickcontrols2/trusty
-    qt510graphicaleffects/trusty qt510svg/trusty qt510scxml/trusty git;
+    sudo apt search ${QTV};
+    sudo apt install build-essential ${QTV}-meta-minimal/trusty
+    ${QTV}quickcontrols/trusty ${QTV}quickcontrols2/trusty
+    ${QTV}graphicaleffects/trusty ${QTV}svg/trusty ${QTV}scxml/trusty git;
     export ARTIFACT="$BIN*.AppImage";
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
