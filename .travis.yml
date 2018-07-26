@@ -25,6 +25,9 @@ matrix:
       env:
         - MATRIX_EVAL="COMPILER=clang++"
 
+before_install:
+- eval "${MATRIX_EVAL}"
+
 install:
 - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     sudo add-apt-repository --yes ppa:beineri/opt-qt-5.10.1-trusty;
