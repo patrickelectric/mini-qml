@@ -34,7 +34,7 @@ install:
     sudo apt search ${QTV};
     sudo apt install build-essential ${QTV}base
     ${QTV}quickcontrols ${QTV}quickcontrols2
-    ${QTV}graphicaleffects ${QTV}svg ${QTV}scxml;
+    ${QTV}graphicaleffects ${QTV}svg ${QTV}scxml libgl1-mesa-dev;
     export ARTIFACT="$BIN*.AppImage";
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
