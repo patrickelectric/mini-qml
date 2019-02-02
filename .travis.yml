@@ -1,6 +1,10 @@
 sudo: false
 language: cpp
 
+branches:
+  only:
+  - master
+
 env:
   global:
     - BIN=mini-qml
