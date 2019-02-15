@@ -1,15 +1,18 @@
-import QtQuick 2.7
-import QtQuick.Controls 2.3
+import QtQuick 2.0
+import QtQuick.Controls 2.1
+import QtQuick.Controls.Material 2.1
 
 ApplicationWindow {
-    id: window
-    title: "Mini-QML"
     visible: true
-    height: 600
-    width: 800
 
-    Rectangle {
-        anchors.fill: parent
-        color: "blue"
+    Material.theme: Material.Dark
+    Material.accent: Material.Purple
+
+    Column {
+        anchors.centerIn: parent
+
+        RadioButton { text: qsTr("Small") }
+        RadioButton { text: qsTr("Medium");  checked: true }
+        RadioButton { text: qsTr("Large") }
     }
 }

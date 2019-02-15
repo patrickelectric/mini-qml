@@ -3,7 +3,7 @@ TARGET = mini-qml
 CONFIG += \
     c++14
 
-QT += gui qml widgets
+QT += gui qml widgets quickcontrols2
 
 # HEADERS +=
 
