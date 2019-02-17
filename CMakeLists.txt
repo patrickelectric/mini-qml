@@ -14,5 +14,4 @@ find_package(Qt5 REQUIRED
     Widgets
 )
 
-qt5_add_resources(RESOURCES resources.qrc)
 add_subdirectory(src)
