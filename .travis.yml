@@ -72,7 +72,7 @@ script:
     chmod a+x linuxdeployqt*.AppImage;
     unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
     ./linuxdeployqt*.AppImage deploy/$BIN.desktop -unsupported-allow-new-glibc -bundle-non-qt-libs -extra-plugins=iconengines,imageformats -verbose=2 -qmldir=../qml -appimage;
-    find . | grep AppImage;
+    mv $BIN*.AppImage $BIN.AppImage;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
     echo "Build project";
