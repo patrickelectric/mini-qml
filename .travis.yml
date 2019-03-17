@@ -17,6 +17,7 @@ matrix:
       addons:
         apt:
           sources:
+            # Add ppa for gcc-7
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
           packages:
             - g++-7
@@ -33,15 +34,17 @@ matrix:
 install:
 - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
     export QTV=qt511;
+    # Set ppa to get a modern version of qt
     sudo apt-add-repository --yes ppa:beineri/opt-qt-5.11.1-xenial;
     sudo apt update -qq;
-    sudo apt search ${QTV};
+    echo "Install qt libraries";
     sudo apt install build-essential ${QTV}base
     ${QTV}quickcontrols ${QTV}quickcontrols2
     ${QTV}graphicaleffects ${QTV}svg ${QTV}scxml libgl1-mesa-dev;
     export ARTIFACT="$BIN*.AppImage";
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+    echo "Download last version of Qt with brew";
     brew update > /dev/null;
     brew install qt5;
     chmod -R 755 /usr/local/opt/qt5/*;
@@ -53,16 +56,18 @@ install:
 script:
 - eval "${MATRIX_EVAL}"
 - if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+    echo "Load qt env";
     source /opt/qt*/bin/qt*-env.sh;
-    mkdir build;
-    cd build;
+    echo "Build project";
+    mkdir build && cd build;
     qmake ..;
     make;
+    echo "Create deploy folder";
     mkdir deploy;
     cp ../deploy/icon.png deploy/;
     cp ../deploy/$BIN.desktop deploy/;
     mv $BIN deploy/;
-    ls deploy;
+    echo "Donwload and run linuxdeployqt";
     wget -c "https://github.com/probonopd/linuxdeployqt/releases/download/continuous/linuxdeployqt-continuous-x86_64.AppImage";
     chmod a+x linuxdeployqt*.AppImage;
     unset QTDIR; unset QT_PLUGIN_PATH ; unset LD_LIBRARY_PATH;
@@ -70,10 +75,11 @@ script:
     find . | grep AppImage;
   fi
 - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
-    mkdir build;
-    cd build;
+    echo "Build project";
+    mkdir build && cd build;
     qmake ..;
     make;
+    echo "Run macdeployqt";
     macdeployqt $BIN.app/ -qmldir=../qml -dmg;
     find . | grep dmg;
   fi
