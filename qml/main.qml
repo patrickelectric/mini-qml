@@ -1,5 +1,7 @@
-import QtQuick 2.7
+import QtQuick 2.12
 import QtQuick.Controls 2.3
+
+import ProvidesSomething 1.0
 
 ApplicationWindow {
     id: window
@@ -8,8 +10,22 @@ ApplicationWindow {
     height: 600
     width: 800
 
-    Rectangle {
+    DropArea {
+        id: dropArea
         anchors.fill: parent
-        color: "blue"
+        keys: ["text/plain"]
+        onEntered: print('entered')
+        onDropped: {
+            list.model = drop.text.split('\n')
+        }
+    }
+
+    ListView {
+        id: list
+        anchors.fill: parent
+        delegate: Loader {
+            id: loader
+            source: modelData
+        }
     }
 }

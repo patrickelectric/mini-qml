@@ -5,10 +5,12 @@ CONFIG += \
 
 QT += gui qml widgets
 
-# HEADERS +=
+HEADERS += \
+    src/providessomething.h
 
 SOURCES += \
-    src/main.cpp
+    src/main.cpp \
+    src/providessomething.cpp
 
 RESOURCES += \
     resources.qrc

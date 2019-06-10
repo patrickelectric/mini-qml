@@ -1,5 +1,6 @@
 set(SRCS
     main.cpp
+    providessomething.cpp
 )
 
 qt5_add_resources(RESOURCES ../resources.qrc)
