@@ -4,6 +4,6 @@
 [![Appveyor Build Status](https://ci.appveyor.com/api/projects/status/xn4jtsci2j5kckww?svg=true)](https://ci.appveyor.com/project/patrickelectric/mini-qml)
 
 :package: **Downloads:**
- - :penguin: [Linux](https://github.com/patrickelectric/mini-qml/releases/download/continuous/mini-qml-x86_64.AppImage)
+ - :penguin: [Linux](https://github.com/patrickelectric/mini-qml/releases/download/continuous/mini-qml.AppImage)
  - :apple: [Apple](https://github.com/patrickelectric/mini-qml/releases/download/continuous/mini-qml.dmg)
  - :computer: [Windows](https://github.com/patrickelectric/mini-qml/releases/download/continuous/mini-qml_release.zip)
