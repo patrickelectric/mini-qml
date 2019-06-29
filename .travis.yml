@@ -20,7 +20,7 @@ matrix:
             # Add ppa for gcc-7
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
             # Set ppa to get a modern version of qt
-            - sourceline: 'ppa:beineri/opt-qt-5.12.1-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.12.3-xenial'
           packages:
             - g++-7
             - git
