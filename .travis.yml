@@ -25,16 +25,18 @@ matrix:
             - g++-7
             - git
       env:
+        - APPIMAGE="true"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
     - os: osx
       osx_image: xcode10.1
       compiler: clang
       env:
+        - DMG="true"
         - MATRIX_EVAL="COMPILER=clang++"
 
 install:
-- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+- if [ ! -z "${APPIMAGE}" ]; then
     export QTV=qt512;
     sudo apt update -qq;
     echo "Install qt libraries";
@@ -43,7 +45,7 @@ install:
     ${QTV}graphicaleffects ${QTV}svg ${QTV}scxml libgl1-mesa-dev;
     export ARTIFACT="$BIN*.AppImage";
   fi
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+- if [ ! -z "${DMG}" ]; then
     echo "Download last version of Qt with brew";
     brew update > /dev/null;
     brew install qt5;
@@ -55,7 +57,7 @@ install:
 
 script:
 - eval "${MATRIX_EVAL}"
-- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
+- if [ ! -z "${APPIMAGE}" ]; then
     echo "Load qt env";
     source /opt/qt*/bin/qt*-env.sh;
     echo "Build project";
@@ -74,7 +76,7 @@ script:
     ./linuxdeployqt*.AppImage deploy/$BIN.desktop -unsupported-allow-new-glibc -bundle-non-qt-libs -extra-plugins=iconengines,imageformats -verbose=2 -qmldir=../qml -appimage;
     mv $BIN*.AppImage $BIN.AppImage;
   fi
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then
+- if [ ! -z "${DMG}" ]; then
     echo "Build project";
     mkdir build && cd build;
     qmake ..;
@@ -87,7 +89,5 @@ script:
 after_success:
 - export GITHUB_TOKEN=$github_token
 - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-- if [ "${TRAVIS_OS_NAME}" = "linux" ]; then
-    bash ./upload.sh $ARTIFACT;
-  fi
-- if [ "${TRAVIS_OS_NAME}" = "osx" ]; then bash ./upload.sh $ARTIFACT; fi
+- if [ ! -z "${APPIMAGE}" ]; then bash ./upload.sh $ARTIFACT; fi
+- if [ ! -z "${DMG}" ]; then bash ./upload.sh $ARTIFACT; fi
