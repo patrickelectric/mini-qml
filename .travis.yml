@@ -28,6 +28,12 @@ matrix:
         - APPIMAGE="true"
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
+    - os: linux
+      dist: xenial
+      sudo: require
+      services: docker
+      env: WEBASM="true"
+
     - os: osx
       osx_image: xcode10.1
       compiler: clang
@@ -88,6 +94,23 @@ script:
     macdeployqt $BIN.app/ -qmldir=../qml -dmg;
     find . | grep dmg;
   fi
+- if [ ! -z "${WEBASM}" ]; then
+    git remote set-url origin https://${GITHUB_TOKEN}@github.com/patrickelectric/mini-qml;
+    git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*";
+    git fetch --all;
+    git config --global user.name "Patrick José Pereira";
+    git config --global user.email "patrickelectric@gmail.com";
+    echo "Build project";
+    mkdir build;
+    docker run --rm -v $PWD:/project/source -v $PWD/build:/project/build maukalinow/qtwasm_builder:5.13_latest;
+    rm -rf build/{Makefile,*.o,*.cpp};
+    git checkout --track origin/gh-pages;
+    mv build/* .;
+    rm -rf build;
+    sudo mv mini-qml.html index.html;
+    git add --all;
+    git commit -sm "Update WebAssembly";
+  fi
 
 after_success:
 - if [ "${TRAVIS_PULL_REQUEST}" == false ] || [ "${TRAVIS_BRANCH}" != "master" ]; then
@@ -97,3 +120,4 @@ after_success:
 - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
 - if [ ! -z "${APPIMAGE}" ]; then bash ./upload.sh $ARTIFACT; fi
 - if [ ! -z "${DMG}" ]; then bash ./upload.sh $ARTIFACT; fi
+- if [ ! -z "${WEBASM}" ]; then git push origin gh-pages; fi
