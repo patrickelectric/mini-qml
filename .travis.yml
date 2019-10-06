@@ -56,6 +56,7 @@ install:
   fi
 
 script:
+- export GITHUB_TOKEN="${github_token}"
 - eval "${MATRIX_EVAL}"
 - if [ ! -z "${APPIMAGE}" ]; then
     echo "Load qt env";
@@ -89,7 +90,6 @@ script:
   fi
 
 after_success:
-- export GITHUB_TOKEN=$github_token
 - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
 - if [ ! -z "${APPIMAGE}" ]; then bash ./upload.sh $ARTIFACT; fi
 - if [ ! -z "${DMG}" ]; then bash ./upload.sh $ARTIFACT; fi
