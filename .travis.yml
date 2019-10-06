@@ -42,6 +42,8 @@ matrix:
         - MATRIX_EVAL="COMPILER=clang++"
 
 install:
+- echo "TEST ${TRAVIS_PULL_REQUEST}"
+- echo "TEST ${TRAVIS_BRANCH}"
 - if [ ! -z "${APPIMAGE}" ]; then
     export QTV=qt512;
     sudo apt update -qq;
