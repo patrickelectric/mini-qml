@@ -115,7 +115,7 @@ script:
   fi
 
 after_success:
-- if [ "${TRAVIS_PULL_REQUEST}" == false ] || [ "${TRAVIS_BRANCH}" != "master" ]; then
+- if [ "${TRAVIS_PULL_REQUEST}" != false ] || [ "${TRAVIS_BRANCH}" != "master" ]; then
     echo "This is not the master branch, no deploy will be done";
     travis_terminate 0;
   fi
