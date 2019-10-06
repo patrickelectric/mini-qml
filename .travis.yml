@@ -90,6 +90,10 @@ script:
   fi
 
 after_success:
+- if [ "${TRAVIS_PULL_REQUEST}" != false ] || [ "${TRAVIS_BRANCH}" != "master" ]; then
+    echo "This is not the master branch, no deploy will be done";
+    travis_terminate 0;
+  fi
 - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
 - if [ ! -z "${APPIMAGE}" ]; then bash ./upload.sh $ARTIFACT; fi
 - if [ ! -z "${DMG}" ]; then bash ./upload.sh $ARTIFACT; fi
