@@ -26,7 +26,7 @@ install:
   # Set and load necessary variables
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
-  - set VCLIBDIR=%WINDIR%\System32 # Find vclibs
+  - set PRJLIBDIR=%WINDIR%\SysWOW64 # Find vclibss
   - set QTDIR
   - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
   - set BIN=mini-qml
