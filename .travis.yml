@@ -1,10 +1,6 @@
 sudo: false
 language: cpp
 
-branches:
-  only:
-  - master
-
 env:
   global:
     - BIN=mini-qml
@@ -20,7 +16,7 @@ matrix:
             # Add ppa for gcc-7
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
             # Set ppa to get a modern version of qt
-            - sourceline: 'ppa:beineri/opt-qt-5.12.3-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.15.0-xenial'
           packages:
             - g++-7
             - git
@@ -43,7 +39,7 @@ matrix:
 
 install:
 - if [ ! -z "${APPIMAGE}" ]; then
-    export QTV=qt512;
+    export QTV=qt515;
     sudo apt update -qq;
     echo "Install qt libraries";
     sudo apt install build-essential ${QTV}base
@@ -102,7 +98,7 @@ script:
     git config --global user.email "patrickelectric@gmail.com";
     echo "Build project";
     mkdir build;
-    docker run --rm -v $PWD:/project/source -v $PWD/build:/project/build maukalinow/qtwasm_builder:5.13_latest;
+    docker run --rm -v $PWD:/project/source -v $PWD/build:/project/build maukalinow/qtwasm_builder:5.15_latest;
     rm -rf build/{Makefile,*.o,*.cpp};
     git checkout --track origin/gh-pages;
     mv build/* .;
