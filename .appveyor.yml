@@ -26,7 +26,6 @@ install:
   # Set and load necessary variables
   - ls %QTDIR%
   - '%QTDIR%\bin\qtenv2.bat'
-  - pip install jinja2
   - qmake -v
   - set VCLIBDIR=%WINDIR%\System32 # Find vclibs
   - set QTDIR
@@ -34,13 +33,13 @@ install:
   - if %QTDIR:msvc=%==%QTDIR% g++ --version
   - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
   - if %QTDIR:msvc=%==%QTDIR% %make% --version
-  - if not "%QTDIR:msvc2017=%"=="%QTDIR%" (
+  - if not "%QTDIR:msvc2019=%"=="%QTDIR%" (
       if not "%ARCH:x64=%"=="x64" (
-        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat";
         echo "64";
+        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat";
       ) else (
-        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars32.bat";
         echo "32";
+        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat";
       )
     )
   - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
