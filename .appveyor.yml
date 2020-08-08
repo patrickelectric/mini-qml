@@ -1,9 +1,5 @@
 version: '{branch}-{build}'
 
-branches:
-  only:
-    - master
-
 init:
   # Create our AppVeyor version
   - ps: $env:commit = $env:appveyor_repo_commit.SubString(0,7)
