@@ -20,7 +20,7 @@ matrix:
             # Add ppa for gcc-7
             - sourceline: 'ppa:ubuntu-toolchain-r/test'
             # Set ppa to get a modern version of qt
-            - sourceline: 'ppa:beineri/opt-qt-5.12.3-xenial'
+            - sourceline: 'ppa:beineri/opt-qt-5.15.0-xenial'
           packages:
             - g++-7
             - git
@@ -43,7 +43,7 @@ matrix:
 
 install:
 - if [ ! -z "${APPIMAGE}" ]; then
-    export QTV=qt512;
+    export QTV=qt515;
     sudo apt update -qq;
     echo "Install qt libraries";
     sudo apt install build-essential ${QTV}base
