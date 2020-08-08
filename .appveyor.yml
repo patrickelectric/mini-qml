@@ -24,26 +24,11 @@ configuration:
 
 install:
   # Set and load necessary variables
-  - ls %QTDIR%
   - '%QTDIR%\bin\qtenv2.bat'
   - qmake -v
   - set VCLIBDIR=%WINDIR%\System32 # Find vclibs
   - set QTDIR
-  - if %QTDIR:_64=%==%QTDIR% ( set ARCH=x86 ) else set ARCH=x64
-  - if %QTDIR:msvc=%==%QTDIR% g++ --version
-  - if %QTDIR:msvc=%==%QTDIR% set make=mingw32-make.exe
-  - if %QTDIR:msvc=%==%QTDIR% %make% --version
-  - if not "%QTDIR:msvc2019=%"=="%QTDIR%" (
-      if not "%ARCH:x64=%"=="x64" (
-        echo "64";
-        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat";
-      ) else (
-        echo "32";
-        call "%ProgramFiles(x86)%\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars32.bat";
-      )
-    )
-  - if not %QTDIR:msvc=%==%QTDIR% set make=nmake.exe
-  - if not %QTDIR:msvc=%==%QTDIR% %make% /? > nul
+  - call "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
   - set BIN=mini-qml
 
 before_build:
@@ -55,7 +40,7 @@ before_build:
 build_script:
   # Compile it and check for .exe
   - cd %APPVEYOR_BUILD_FOLDER%-build
-  - '%make%'
+  - nmake
   - dir /b /s *.exe
 
 after_build:
